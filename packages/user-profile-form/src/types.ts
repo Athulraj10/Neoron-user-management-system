@@ -37,4 +37,5 @@ export interface UserProfileFormProps {
    onSubmit: (data: UserFormData) => void
    onCancel?: () => void
    showRoleSelector?: boolean
+   onEmailValidation?: (email: string) => string | undefined
 }

@@ -14,6 +14,7 @@ export const UserProfileForm: React.FC<UserProfileFormProps> = ({
    onSubmit,
    onCancel,
    showRoleSelector = false,
+   onEmailValidation,
 }) => {
    const [formData, setFormData] = useState<UserFormData>({
       fullName: initialData?.fullName || "",
@@ -44,6 +45,11 @@ export const UserProfileForm: React.FC<UserProfileFormProps> = ({
          newErrors.email = "Email is required"
       } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
          newErrors.email = "Invalid email format"
+      } else if (onEmailValidation) {
+         const emailError = onEmailValidation(formData.email)
+         if (emailError) {
+            newErrors.email = emailError
+         }
       }
 
       if (!formData.phone.trim()) {
@@ -89,6 +95,16 @@ export const UserProfileForm: React.FC<UserProfileFormProps> = ({
 
    const handleSubmit = (e: React.FormEvent) => {
       e.preventDefault()
+
+      // Additional email validation before submission
+      if (onEmailValidation && formData.email.trim()) {
+         const emailError = onEmailValidation(formData.email)
+         if (emailError) {
+            setErrors((prev) => ({ ...prev, email: emailError }))
+            return
+         }
+      }
+
       if (validateForm()) {
          onSubmit(formData)
       }
@@ -164,6 +180,14 @@ export const UserProfileForm: React.FC<UserProfileFormProps> = ({
                   id='email'
                   value={formData.email}
                   onChange={(e) => handleInputChange("email", e.target.value)}
+                  onBlur={(e) => {
+                     if (onEmailValidation && e.target.value.trim()) {
+                        const emailError = onEmailValidation(e.target.value)
+                        if (emailError) {
+                           setErrors((prev) => ({ ...prev, email: emailError }))
+                        }
+                     }
+                  }}
                   disabled={isReadOnly}
                   className={errors.email ? "error" : ""}
                />

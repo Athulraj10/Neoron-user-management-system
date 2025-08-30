@@ -8,7 +8,7 @@ import "./CreateUser.css"
 
 export const CreateUser: React.FC = () => {
    const { user: currentUser } = useAuth()
-   const { addUser } = useUsers()
+   const { addUser, checkEmailExists } = useUsers()
    const navigate = useNavigate()
 
    if (!currentUser) {
@@ -37,6 +37,13 @@ export const CreateUser: React.FC = () => {
       navigate("/users")
    }
 
+   const handleEmailValidation = (email: string): string | undefined => {
+      if (checkEmailExists(email)) {
+         return "Email already exists. Please use a different email address."
+      }
+      return undefined
+   }
+
    return (
       <div className='create-user-page'>
          <div className='create-user-header'>
@@ -50,6 +57,7 @@ export const CreateUser: React.FC = () => {
                onSubmit={handleSubmit}
                onCancel={handleCancel}
                showRoleSelector={true}
+               onEmailValidation={handleEmailValidation}
             />
          </div>
       </div>

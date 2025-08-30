@@ -8,7 +8,7 @@ import "./Users.css"
 
 export const Users: React.FC = () => {
    const { user: currentUser } = useAuth()
-   const { users, addUser, updateUser, deleteUser } = useUsers()
+   const { users, addUser, updateUser, deleteUser, checkEmailExists } = useUsers()
 
    const [showForm, setShowForm] = useState(false)
    const [editingUser, setEditingUser] = useState<User | null>(null)
@@ -63,6 +63,19 @@ export const Users: React.FC = () => {
       setViewingUser(null)
    }
 
+   const handleEmailValidation = (email: string): string | undefined => {
+      if (formMode === "create") {
+         if (checkEmailExists(email)) {
+            return "Email already exists. Please use a different email address."
+         }
+      } else if (formMode === "edit" && editingUser) {
+         if (checkEmailExists(email, editingUser.id)) {
+            return "Email already exists. Please use a different email address."
+         }
+      }
+      return undefined
+   }
+
    const getInitialData = (): UserFormData | undefined => {
       if (formMode === "edit" && editingUser) {
          return {
@@ -114,7 +127,8 @@ export const Users: React.FC = () => {
                      initialData={getInitialData()}
                      onSubmit={handleFormSubmit}
                      onCancel={handleFormCancel}
-                     showRoleSelector={formMode === "create" || formMode === "edit"}
+                     showRoleSelector={formMode === "edit" || formMode === "create"}
+                     onEmailValidation={handleEmailValidation}
                   />
                </div>
             </div>

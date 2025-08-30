@@ -7,6 +7,7 @@ interface UserContextType {
    updateUser: (id: string, userData: UserFormData) => void
    deleteUser: (id: string) => void
    getUserById: (id: string) => User | undefined
+   checkEmailExists: (email: string, excludeUserId?: string) => boolean
    addDashboardActivity: (activity: {
       type: "user_created" | "user_updated" | "user_deleted"
       title: string
@@ -175,6 +176,13 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
       return users.find((user) => user.id === id)
    }
 
+   const checkEmailExists = (email: string, excludeUserId?: string) => {
+      return users.some(
+         (user) =>
+            user.email.toLowerCase() === email.toLowerCase() && user.id !== excludeUserId
+      )
+   }
+
    const addDashboardActivity = (activity: {
       type: "user_created" | "user_updated" | "user_deleted"
       title: string
@@ -229,6 +237,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
       updateUser,
       deleteUser,
       getUserById,
+      checkEmailExists,
       addDashboardActivity,
       updateDashboardStats,
    }

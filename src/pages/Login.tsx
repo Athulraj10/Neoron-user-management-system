@@ -35,6 +35,7 @@ export const Login: React.FC = () => {
   };
 
   const handleDemoLogin = (username: string) => {
+    // default password for demo accounts
     setCredentials({ username, password: 'demo123' });
   };
 
@@ -79,9 +80,9 @@ export const Login: React.FC = () => {
         </form>
 
         <div className="demo-accounts">
-          <h3>Demo Accounts</h3>
+          <h3>Select Any Accounts</h3>
           <p>Click any account to auto-fill credentials:</p>
-          
+
           <div className="demo-account-buttons">
             <button
               type="button"
@@ -91,7 +92,7 @@ export const Login: React.FC = () => {
               <strong>Admin</strong>
               <span>Full access to all features</span>
             </button>
-            
+
             <button
               type="button"
               onClick={() => handleDemoLogin('supervisor')}
@@ -100,7 +101,7 @@ export const Login: React.FC = () => {
               <strong>Supervisor</strong>
               <span>Edit & view users only</span>
             </button>
-            
+
             <button
               type="button"
               onClick={() => handleDemoLogin('associate')}
