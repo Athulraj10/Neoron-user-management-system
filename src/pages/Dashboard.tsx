@@ -225,14 +225,6 @@ export const Dashboard: React.FC = () => {
                         <div className='stat-label'>New This Month</div>
                      </div>
                   </div>
-
-                  <div className='stat-card'>
-                     <div className='stat-icon'></div>
-                     <div className='stat-content'>
-                        <div className='stat-number'>{systemStats.systemStatus}</div>
-                        <div className='stat-label'>System Status</div>
-                     </div>
-                  </div>
                </div>
             </div>
 

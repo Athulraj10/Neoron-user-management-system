@@ -54,6 +54,8 @@ export const UserProfileForm: React.FC<UserProfileFormProps> = ({
 
       if (!formData.phone.trim()) {
          newErrors.phone = "Phone number is required"
+      } else if (formData.phone.trim().length < 10) {
+         newErrors.phone = "Phone number must be at least 10 digits"
       }
 
       if (showRoleSelector && (mode === "create" || mode === "edit") && !formData.role) {
@@ -179,10 +181,18 @@ export const UserProfileForm: React.FC<UserProfileFormProps> = ({
                   type='email'
                   id='email'
                   value={formData.email}
-                  onChange={(e) => handleInputChange("email", e.target.value)}
-                  onBlur={(e) => {
-                     if (onEmailValidation && e.target.value.trim()) {
-                        const emailError = onEmailValidation(e.target.value)
+                  onChange={(e) => {
+                     const value = e.target.value
+                     setFormData((prev) => ({ ...prev, email: value }))
+
+                     // Clear previous email error
+                     if (errors.email) {
+                        setErrors((prev) => ({ ...prev, email: undefined }))
+                     }
+
+                     // Call email validation on every change
+                     if (onEmailValidation && value.trim()) {
+                        const emailError = onEmailValidation(value)
                         if (emailError) {
                            setErrors((prev) => ({ ...prev, email: emailError }))
                         }
