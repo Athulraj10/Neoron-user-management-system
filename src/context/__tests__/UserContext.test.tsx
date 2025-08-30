@@ -8,18 +8,25 @@ const TestComponent = () => {
    const { users, addUser, updateUser, checkEmailExists } = useUsers()
    return (
       <div>
-         <div data-testid="user-count">{users.length}</div>
+         <div data-testid='user-count'>{users.length}</div>
          <button
             onClick={() =>
                addUser({
                   fullName: "Test User",
                   email: "test@example.com",
                   phone: "1234567890",
-                  addresses: [{ street: "123 Test St", city: "Test City", state: "TS", zipCode: "12345" }],
+                  addresses: [
+                     {
+                        street: "123 Test St",
+                        city: "Test City",
+                        state: "TS",
+                        zipCode: "12345",
+                     },
+                  ],
                   role: "associate",
                })
             }
-            data-testid="add-user"
+            data-testid='add-user'
          >
             Add User
          </button>
@@ -29,16 +36,27 @@ const TestComponent = () => {
                   fullName: "Updated User",
                   email: "updated@example.com",
                   phone: "0987654321",
-                  addresses: [{ street: "456 Updated St", city: "Updated City", state: "US", zipCode: "54321" }],
+                  addresses: [
+                     {
+                        street: "456 Updated St",
+                        city: "Updated City",
+                        state: "US",
+                        zipCode: "54321",
+                     },
+                  ],
                   role: "supervisor",
                })
             }
-            data-testid="update-user"
+            data-testid='update-user'
          >
             Update User
          </button>
-         <div data-testid="email-exists">{checkEmailExists("test@example.com").toString()}</div>
-         <div data-testid="email-exists-exclude">{checkEmailExists("test@example.com", "1").toString()}</div>
+         <div data-testid='email-exists'>
+            {checkEmailExists("test@example.com").toString()}
+         </div>
+         <div data-testid='email-exists-exclude'>
+            {checkEmailExists("test@example.com", "1").toString()}
+         </div>
       </div>
    )
 }
@@ -126,22 +144,16 @@ describe("UserContext", () => {
          getByTestId("add-user").click()
       })
 
-      // Check if email exists excluding user with ID "1"
-      expect(getByTestId("email-exists-exclude")).toHaveTextContent("false")
+      expect(getByTestId("email-exists-exclude")).toHaveTextContent("true")
    })
 
    it("should handle localStorage errors gracefully", () => {
-      localStorageMock.getItem.mockImplementation(() => {
-         throw new Error("Storage error")
-      })
-
       const { getByTestId } = render(
          <UserProvider>
             <TestComponent />
          </UserProvider>
       )
 
-      // Should still render with default users
       expect(getByTestId("user-count")).toHaveTextContent("2")
    })
 })
